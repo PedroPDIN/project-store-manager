@@ -17,22 +17,20 @@ describe("Product Model", async () => {
           "name": "produto B",
           "quantity": 20
         },
-      ]
+      ];
 
       before(() => sinon.stub(connection, 'execute'). resolves(fakeModel));
       after(() => connection.execute.restore());
 
       it("Retorna um objeto.", async () => {
         const getAll = await ProductsModel.getAll();
-
         expect(getAll).to.be.a('object');
-      })
+      });
 
       it("Retorna com as determinadas chaves(id, name, quantity).", async () => {
         const getAll = await ProductsModel.getAll();
-
         expect(getAll).to.have.all.keys('id', 'name', 'quantity');
-      })
+      });
   });
 
   describe('Os produtos devem ser retornados referente ao ID', async () => {
