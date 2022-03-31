@@ -1,11 +1,10 @@
 const { expect } = require("chai");
-const express = require("express");
 const sinon = require("sinon");
 
 const ProductsModel = require("../../../models/products.model");
 const ProductsServices = require("../../../services/product.services");
 
-describe.only("Product Service.", async () => {
+describe("Product Service.", async () => {
   describe("Retorna todos os produtos.", async () => {
     const fakeModel = [
       {
@@ -24,13 +23,13 @@ describe.only("Product Service.", async () => {
     after(() => ProductsModel.getAll.restore());
 
     it('Retorna um objeto.', async () => {
-      const getAll = ProductsServices.getAllService();
-      express(getAll).to.be.a('object');
+      const getAll = await ProductsServices.getAllService();
+      expect(getAll).to.be.a('array');
     });
 
     it('Retorna com as determinadas chaves(id, name, quantity).', async () => {
-      const getAll = ProductsServices.getAllService();
-      express(getAll).to.have.all.keys('id', 'name', 'quantity');
+      const getAll = await ProductsServices.getAllService();
+      expect(getAll[0]).to.have.all.keys('id', 'name', 'quantity');
     })
   });
 
@@ -38,22 +37,22 @@ describe.only("Product Service.", async () => {
     describe('Verifica se o ID não é uma string.', async () => {
 
       it('Retorna null caso ID não seja string.', async () => {
-        const getById = ProductsServices.getByIdService('id');
+        const getById = await ProductsServices.getByIdService('id');
         expect(getById).to.be.equal(null);
       });
       it('Retorna null caso ID não exista.', async () => {
-        const getById = ProductsServices.getByIdService();
+        const getById = await ProductsServices.getByIdService();
         expect(getById).to.be.equal(null);
       });
     });
   
     describe('Caso o retorno seja inválido', async () => {
-      before(() => sinon.stub(ProductsModel, 'getById'). resolves(false));
-      after(() => ProductsModel.getAll.restore());
+      before(() => sinon.stub(ProductsModel, 'getById').withArgs(1).resolves(null));
+      after(() => ProductsModel.getById.restore());
 
       it('Retorna null', async () => {
-        const getById = await ProductsServices.getByIdService(0);
-        expect(getById).to.be.equal(null)
+        const getById = await ProductsServices.getByIdService(1);
+        expect(getById).to.be.null;
       });
     });
 
@@ -69,11 +68,11 @@ describe.only("Product Service.", async () => {
 
       it("Retorna um objeto", async () => {
         const getById = await ProductsServices.getByIdService(1);
-        expect(getById).to.be.a('object');
+        expect(getById[0]).to.be.a('object');
       });
       it("Retorna com as determinadas chaves(id, name, quantity).", async () => {
         const getById = await ProductsServices.getByIdService(1);
-        expect(getById).to.have.all.keys('id', 'name', 'quantity');
+        expect(getById[0]).to.have.all.keys('id', 'name', 'quantity');
       });
     });
   });

@@ -12,7 +12,7 @@ const getById = async (id) => {
   const [result] = await connection.execute(query, [id]);
 
   if (result < 1) return null;
-  return result;
+  return result[0];
 };
 
 module.exports = {

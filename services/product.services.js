@@ -1,4 +1,4 @@
-const { getAll, getById } = require('../models/products.model');
+const ProductsModel = require('../models/products.model');
 
 const isValid = (id) => {
   if (!id || typeof id !== 'number') return false;
@@ -6,13 +6,15 @@ const isValid = (id) => {
 };
 
 const getAllService = async () => {
-  const getAllModel = await getAll();
+  const getAllModel = await ProductsModel.getAll();
   return getAllModel;
 };
 
 const getByIdService = async (id) => {
-  if (!isValid(id)) return null;
-  const getByIdModel = await getById(id);
+  const boolValid = isValid(id);
+  if (boolValid) return null;
+
+  const getByIdModel = await ProductsModel.getById(id);
   if (!getByIdModel) return null;
   return getByIdModel;
 };
