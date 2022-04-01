@@ -66,4 +66,24 @@ describe("Product Model", async () => {
       expect(getById).to.have.all.keys('id', 'name', 'quantity');
     });
   });
+
+  describe.only('Inserir um novo produto na tabela product.', async () => {
+    const fakeModel = [{
+      name: 'new product',
+      quantity: 10,
+    }];
+
+    before(() => sinon.stub(connection, 'execute').resolves([{ insertId: 1 }]));
+    after(() => connection.execute.restore());
+
+    it('Se o retorno é um objeto.', async () => {
+      const element = await ProductsModel.insertProduct(fakeModel);
+      expect(element).to.be.a('object');
+    })
+
+    it('Retorna o id do Product.', async () => {
+      const element = await ProductsModel.insertProduct(fakeModel);
+      expect(element.id).to.be.equal(1);
+    });
+  });
 });
