@@ -53,7 +53,7 @@ describe("Product Model", async () => {
       }
     ];
   
-    before(() => sinon.stub(connection, 'execute'). resolves(fakeModel));
+    before(() => sinon.stub(connection, 'execute'). resolves([fakeModel]));
     after(() => connection.execute.restore());
 
     it('Retorna um objeto.', async () => {
@@ -67,7 +67,7 @@ describe("Product Model", async () => {
     });
   });
 
-  describe.only('Inserir um novo produto na tabela product.', async () => {
+  describe('Inserir um novo produto na tabela product.', async () => {
     const fakeModel = [{
       name: 'new product',
       quantity: 10,
@@ -86,4 +86,21 @@ describe("Product Model", async () => {
       expect(element.id).to.be.equal(1);
     });
   });
+
+  describe('Caso exista o nome de produto retorne "exist".', async () => {
+    const fakeModel = [{ result: 'exist' }];
+
+    before(() => sinon.stub(connection, 'execute'). resolves([fakeModel]));
+    after(() => connection.execute.restore());
+
+    it('Retorna um objeto.', async () => {
+      const element = await ProductsModel.existProduct('nameProduct');
+      expect(element).to.be.a('object');
+    })
+
+    it('Retorna o valor exist.', async () => {
+      const element = await ProductsModel.existProduct('nameProduct');
+      expect(element.result).to.be.equal('exist');
+    })
+  })
 });

@@ -13,7 +13,24 @@ const getByIdController = async (req, res) => {
   return res.status(200).json(getById);
 };
 
+const insertProductController = async (req, res) => {
+  const { name, quantity } = req.body;
+  const data = { name, quantity };
+  const insertProduct = await ProductsServices.insertProductService(data);
+  const STATUS_EXAMPLE = 400;
+
+  if (insertProduct.status.status >= STATUS_EXAMPLE) {
+    return res
+    .status(insertProduct.status.status)
+    .json(insertProduct.message.message);
+  }
+  return res
+  .status(insertProduct.status.status)
+  .json(insertProduct.message);
+};
+
 module.exports = {
   getAllController,
   getByIdController,
+  insertProductController,
 };

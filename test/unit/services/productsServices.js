@@ -36,7 +36,10 @@ describe("Product Service.", async () => {
   describe('Retorna o produto referente ao ID.', async () => {
     describe('Verifica se o ID não é uma string.', async () => {
 
-      it('Retorna null caso ID não seja string.', async () => {
+      before(() => sinon.stub(ProductsModel, 'getById').resolves(false))
+      after(() => ProductsModel.getById.restore());
+
+      it('Retorna null caso ID seja string.', async () => {
         const getById = await ProductsServices.getByIdService('id');
         expect(getById).to.be.equal(null);
       });
@@ -76,27 +79,80 @@ describe("Product Service.", async () => {
       });
     });
 
-    describe('Deve retorna o novo produto.', async () => {
-      const fakeService = {
-        id: 1,
-        name: 'new product',
-        quantity: 20,
-      }
+    describe('Retorna os novos produtos.', async () => {
+      describe('Deve retorna o novo produto.', async () => {
+        const fakeService = {
+          id: 1,
+          name: 'new product',
+          quantity: 20,
+        };
+  
+        before(() => {
+          sinon.stub(ProductsModel, 'insertProduct').resolves(fakeService);
+          sinon.stub(ProductsModel, 'existProduct').resolves([[]]);
+        })
+        after(() => {
+          ProductsModel.insertProduct.restore();
+          ProductsModel.existProduct.restore();
+        });
+  
+        it('Retorna um objeto.', async () => {
+          const element = await ProductsServices.insertProductService(fakeService);
+          expect(element.message).to.be.a('object');
+        });
+        it('Retorna o novo produto', async () => { 
+          const element = await ProductsServices.insertProductService(fakeService);
+          expect(element.message).to.have.all.keys('id', 'name', 'quantity');
+        });
+      });
 
-      before(() => sinon
-      .stub(ProductsModel, 'insertProduct')
-      .resolves(fakeService));
-      after(() => ProductsModel.insertProduct.restore());
+      describe('Retorna mensagem de erro caso já exista um produto cadastrado.', async () => {
+        const fakeService = {
+          id: 1,
+          name: 'new product',
+          quantity: 20,
+        }
 
-      it('Retorna um objeto.', async () => {
-        const element = await ProductsServices.insertProductService(fakeService);
-        expect(element).to.be.a('object');
-      })
-      it('Retorna o novo produto', async () => { 
-        const element = await ProductsServices.insertProductService(fakeService);
-        expect(element.name).to.be.equal('new project');
-        expect(element.quantity).to.be.equal(20)
-      })
-    })
+        before(() => {
+          sinon.stub(ProductsModel, 'insertProduct').resolves(fakeService);
+          sinon.stub(ProductsModel, 'existProduct').resolves({ result: 'exist' })
+        });
+  
+        after(() => {
+          ProductsModel.existProduct.restore();
+          ProductsModel.insertProduct.restore();
+        })
+
+        it('Retorna status 409 e mensagem de erro.', async () => {
+          const element = await ProductsServices.insertProductService(fakeService);
+          expect(element.status.status).to.be.equal(409);
+          expect(element.message.message).to.be.equal('Product already exists');
+        });
+      });
+
+      describe('Retorna status 201, com os novos produtos.', async () => {
+        const fakeService = {
+          id: 1,
+          name: 'new product',
+          quantity: 20,
+        }
+
+        before(() => {
+          sinon.stub(ProductsModel, 'insertProduct').resolves(fakeService);
+          sinon.stub(ProductsModel, 'existProduct').resolves([[]])
+        });
+  
+        after(() => {
+          ProductsModel.existProduct.restore();
+          ProductsModel.insertProduct.restore();
+        });
+
+        it('Retorna status com os novos produtos.', async () => {
+          const element = await ProductsServices.insertProductService(fakeService);
+          expect(element.status.status).to.be.equal(201);
+          expect(element.message).to.be.equal(fakeService);
+        });
+      });
+    });
   });
 });

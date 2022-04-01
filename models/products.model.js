@@ -15,6 +15,18 @@ const getById = async (id) => {
   return result[0];
 };
 
+const existProduct = async (name) => {
+  const query = `
+  SELECT 
+  CASE 
+  WHEN EXISTS(SELECT name FROM StoreManager.products WHERE name = ?)
+  THEN 'exist'
+  END AS result;
+  `;
+  const [result] = await connection.execute(query, [name]);
+  return result[0];
+};
+
 const insertProduct = async ({ name, quantity }) => {
   const query = `INSERT INTO StoreManager.products (name, quantity)
   VALUES (?, ?)`;
@@ -29,5 +41,6 @@ const insertProduct = async ({ name, quantity }) => {
 module.exports = {
   getAll,
   getById,
+  existProduct,
   insertProduct,
 };
