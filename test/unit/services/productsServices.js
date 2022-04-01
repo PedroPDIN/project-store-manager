@@ -75,5 +75,28 @@ describe("Product Service.", async () => {
         expect(getById[0]).to.have.all.keys('id', 'name', 'quantity');
       });
     });
+
+    describe('Deve retorna o novo produto.', async () => {
+      const fakeService = {
+        id: 1,
+        name: 'new product',
+        quantity: 20,
+      }
+
+      before(() => sinon
+      .stub(ProductsModel, 'insertProduct')
+      .resolves(fakeService));
+      after(() => ProductsModel.insertProduct.restore());
+
+      it('Retorna um objeto.', async () => {
+        const element = await ProductsServices.insertProductService(fakeService);
+        expect(element).to.be.a('object');
+      })
+      it('Retorna o novo produto', async () => { 
+        const element = await ProductsServices.insertProductService(fakeService);
+        expect(element.name).to.be.equal('new project');
+        expect(element.quantity).to.be.equal(20)
+      })
+    })
   });
 });
