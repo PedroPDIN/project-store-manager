@@ -41,6 +41,7 @@ const updateProductController = async (req, res) => {
    .status(updateProduct.status.status)
    .json(updateProduct.message);
  }
+ 
  return res
  .status(updateProduct.status.status)
  .json(updateProduct.data);
