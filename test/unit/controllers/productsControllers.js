@@ -3,9 +3,9 @@ const sinon = require("sinon");
 
 const ProductsServices = require("../../../services/product.services");
 const ProductsControllers = require("../../../controllers/products.controller");
-const ProductsModel = require("../../../models/products.model");
+// const ProductsModel = require("../../../models/products.model");
 
-describe.only("Products Controllers", async () => {
+describe("Products Controllers", async () => {
   describe("Retorna status 200, com todos os produtos.", async () => {
     const fakeController = [
       {

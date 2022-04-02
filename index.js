@@ -17,10 +17,14 @@ app.get('/products', ProductsControllers.getAllController);
 app.get('/products/:id', ProductsControllers.getByIdController);
 app.get('/sales', SalesControllers.getAllController);
 app.get('/sales/:id', SalesControllers.getByIdController);
+
 app.post('/products',
 isValidNameProduct,
 isValidQuantityProduct,
 ProductsControllers.insertProductController);
+
+app.put('/products/:id',
+ProductsControllers.updateProductController);
 
 app.listen(process.env.PORT, () => {
   console.log(`Escutando na porta ${process.env.PORT}`);
