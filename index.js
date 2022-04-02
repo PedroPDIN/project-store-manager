@@ -13,8 +13,8 @@ app.get('/', (_request, response) => {
   response.send();
 });
 
-app.get('/products', ProductsControllers.getAllController);
 app.get('/products/:id', ProductsControllers.getByIdController);
+app.get('/products', ProductsControllers.getAllController);
 app.get('/sales', SalesControllers.getAllController);
 app.get('/sales/:id', SalesControllers.getByIdController);
 
@@ -24,7 +24,12 @@ isValidQuantityProduct,
 ProductsControllers.insertProductController);
 
 app.put('/products/:id',
+isValidNameProduct,
+isValidQuantityProduct,
 ProductsControllers.updateProductController);
+
+app.delete('/products/:id',
+ProductsControllers.deleteProductController);
 
 app.listen(process.env.PORT, () => {
   console.log(`Escutando na porta ${process.env.PORT}`);

@@ -41,15 +41,31 @@ const updateProductController = async (req, res) => {
    .status(updateProduct.status.status)
    .json(updateProduct.message);
  }
- 
+
  return res
  .status(updateProduct.status.status)
  .json(updateProduct.data);
 };
+
+ const deleteProductController = async (req, res) => {
+  const { id } = req.params;
+  const deleteProduct = await ProductsServices.deleteProductService(id);
+  const STATUS_EXAMPLE = 400;
+
+  if (deleteProduct.status.status >= STATUS_EXAMPLE) {
+    return res
+    .status(deleteProduct.status.status)
+    .json(deleteProduct.message);
+  }
+  return res
+  .status(deleteProduct.status.status)
+  .end();
+ };
 
 module.exports = {
   getAllController,
   getByIdController,
   insertProductController,
   updateProductController,
+  deleteProductController,
 };

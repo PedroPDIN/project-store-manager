@@ -16,7 +16,10 @@ const isValidQuantityProduct = (req, res, next) => {
   const { quantity } = req.body;
   const LIMIT = 1;
   
-  if (!quantity) return res.status(400).json({ message: '"quantity" is required' });
+  if (!quantity && quantity !== 0) {
+    return res.status(400).json({ message: '"quantity" is required' });
+  }
+
   if (quantity < LIMIT) {
     return res
     .status(422)
