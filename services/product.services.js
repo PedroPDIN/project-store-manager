@@ -22,13 +22,12 @@ const getByIdService = async (id) => {
  const insertProductService = async ({ name, quantity }) => {
   const data = { name, quantity };
   const existProduct = await ProductsModel.existProduct(name);
-  console.log(existProduct);
   const newProduct = await ProductsModel.insertProduct(data);
 
   if (existProduct.result === 'exist') {
     return { status: { status: 409 }, message: { message: 'Product already exists' } };
   }
-  return { status: { status: 201 }, message: newProduct };
+  return { status: { status: 201 }, data: newProduct };
 };
 
 module.exports = {

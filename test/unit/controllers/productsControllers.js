@@ -124,8 +124,7 @@ describe.only("Products Controllers", async () => {
     });
 
     it("Retorna status 409.", async () => {
-      const test = await ProductsControllers.insertProductController(request, response);
-      console.log('xablau');
+      await ProductsControllers.insertProductController(request, response);
       expect(response.status.calledWith(409)).to.be.equal(true);
     });
 

@@ -22,11 +22,11 @@ const insertProductController = async (req, res) => {
   if (insertProduct.status.status >= STATUS_EXAMPLE) {
     return res
     .status(insertProduct.status.status)
-    .json(insertProduct.message.message);
+    .json(insertProduct.message);
   }
   return res
   .status(insertProduct.status.status)
-  .json(insertProduct.message);
+  .json(insertProduct.data);
 };
 
 module.exports = {
