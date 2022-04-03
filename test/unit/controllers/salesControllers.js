@@ -4,7 +4,7 @@ const sinon = require("sinon");
 const SalesServices = require("../../../services/sales.services");
 const SalesControllers = require("../../../controllers/sales.controller");
 
-describe.only("Sales Controller.", async () => {
+describe("Sales Controller.", async () => {
   describe("Retorna status 200, com todos as vendas.", async () => {
     const fakeController = [
       {
