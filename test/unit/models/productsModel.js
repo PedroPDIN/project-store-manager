@@ -96,11 +96,30 @@ describe("Product Model", async () => {
     it('Retorna um objeto.', async () => {
       const element = await ProductsModel.existProduct('nameProduct');
       expect(element).to.be.a('object');
-    })
+    });
 
     it('Retorna o valor exist.', async () => {
       const element = await ProductsModel.existProduct('nameProduct');
       expect(element.result).to.be.equal('exist');
-    })
-  })
+    });
+  });
+
+  describe('Retorna dados (objeto) que irá atualizar o produto.', async () => {
+    const fakeModel = { id: 1, name: 'update product', quantity: 10 };
+
+    before(() => sinon.stub(connection, 'execute'). resolves(fakeModel));
+    after(() => connection.execute.restore());
+
+    it('Retorna um objeto.', async () => {
+      const data = { name: 'updateProduct', quantity: 10 };
+      const updateProduct = await ProductsModel.updateProduct(1, data);
+      expect(updateProduct).to.be.a('object');
+    });
+
+    it('Possui as determinadas chaves (id, name, quantity)', async () => {
+      const data = { name: 'updateProduct', quantity: 10 };
+      const updateProduct = await ProductsModel.updateProduct(1, data);
+      expect(updateProduct).to.have.all.keys('id', 'name', 'quantity');
+    });
+  });
 });
