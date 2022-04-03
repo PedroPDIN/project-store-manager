@@ -13,7 +13,14 @@ const getByIdController = async (req, res) => {
     return res.status(200).json(getById);
   };
 
+const insertSaleController = async (req, res) => {
+  const newSale = req.body;
+  const insertSale = await SalesServices.insertSaleService(newSale);
+  return res.status(201).json(insertSale);
+};
+
 module.exports = {
     getAllController,
     getByIdController,
+    insertSaleController,
 };

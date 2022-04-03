@@ -23,6 +23,8 @@ isValidNameProduct,
 isValidQuantityProduct,
 ProductsControllers.insertProductController);
 
+app.post('/sales', SalesControllers.insertSaleController);
+
 app.put('/products/:id',
 isValidNameProduct,
 isValidQuantityProduct,

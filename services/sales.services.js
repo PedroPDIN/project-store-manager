@@ -19,7 +19,13 @@ const getByIdService = async (id) => {
   return getByIdModel;
 };
 
+const insertSaleService = async (sale) => {
+  const insertSale = await SalesModel.insertSale(sale);
+  return insertSale;
+};
+
 module.exports = {
   getAllService,
   getByIdService,
+  insertSaleService,
 };

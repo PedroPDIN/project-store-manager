@@ -37,7 +37,7 @@ const insertSale = async (sale) => {
   const itemsSold = [];
   const queryDate = 'INSERT INTO StoreManager.sales (date) VALUES (NOW());';
   const queryData = `
-  INSERT INTO StoreManager.sales (sale_id, product_id, quantity)
+  INSERT INTO StoreManager.sales_products (sale_id, product_id, quantity)
   VALUES (?, ?, ?);
   `;
 
