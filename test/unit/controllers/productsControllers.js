@@ -61,7 +61,6 @@ describe("Products Controllers", async () => {
 
     it("Retorna status 404.", async () => {
       await ProductsControllers.getByIdController(request, response);
-
       expect(response.status.calledWith(404)).to.be.equal(true);
     });
 

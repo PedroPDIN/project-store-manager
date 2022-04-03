@@ -43,6 +43,9 @@ describe("Sales Services", () => {
   describe('Retorna a venda referente ao ID.', async () => {
     describe('Verifica se o ID não é uma string.', async () => {
 
+      before(() => sinon.stub(SalesModel, 'getById').resolves(false))
+      after(() => SalesModel.getById.restore());
+
       it('Retorna null caso ID não seja string.', async () => {
         const getById = await SalesServices.getByIdService('id');
         expect(getById).to.be.equal(null);
@@ -70,11 +73,6 @@ describe("Sales Services", () => {
           "productId": 1,
           "quantity": 2
         },
-        {
-          "date": "2021-09-09T04:54:54.000Z",
-          "productId": 2,
-          "quantity": 2
-        }
       ];
 
         before(() => sinon.stub(SalesModel, 'getById').resolves(fakeService));

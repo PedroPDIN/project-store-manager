@@ -4,7 +4,7 @@ const sinon = require("sinon");
 const SalesServices = require("../../../services/sales.services");
 const SalesControllers = require("../../../controllers/sales.controller");
 
-describe("Sales Controller.", async () => {
+describe.only("Sales Controller.", async () => {
   describe("Retorna status 200, com todos as vendas.", async () => {
     const fakeController = [
       {
@@ -46,10 +46,12 @@ describe("Sales Controller.", async () => {
   describe("Retorna status 404, caso não encontre ID do produto.", async () => {
     const response = {};
     const request = {};
+    const message = { message: "ID not found" };
 
     before(() => {
       response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
+      response.json = sinon.stub().returns(message);
+      request.params = { id: 1 };
 
       sinon.stub(SalesServices, "getByIdService").resolves(false);
     });
@@ -57,12 +59,11 @@ describe("Sales Controller.", async () => {
 
     it("Retorna status 404.", async () => {
       await SalesControllers.getByIdController(request, response);
-      expect(response.status.calledWith(404)).to.be.true;
+      expect(response.status.calledWith(404)).to.be.equal(true);
     });
     it("Retorna a mensagem.", async () => {
-      const message = { message: "ID not found" };
       await SalesControllers.getByIdController(request, response);
-      expect(response.json.calledWith(message)).to.be.true;
+      expect(response.json.calledWith(sinon.match.object)).to.be.equal(true);
     });
   });
 
