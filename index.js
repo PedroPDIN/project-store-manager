@@ -30,9 +30,14 @@ isValidQuantitySales,
 SalesControllers.insertSaleController);
 
 app.put('/products/:id',
-isValidQuantityProduct,
 isValidNameProduct,
+isValidQuantityProduct,
 ProductsControllers.updateProductController);
+
+app.put('/sales/:id',
+isValidProductIdSales,
+isValidQuantitySales,
+SalesControllers.updateSaleController);
 
 app.delete('/products/:id',
 ProductsControllers.deleteProductController);

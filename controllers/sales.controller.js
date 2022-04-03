@@ -19,8 +19,17 @@ const insertSaleController = async (req, res) => {
   return res.status(201).json(insertSale);
 };
 
+const updateSaleController = async (req, res) => {
+  const { id } = req.params;
+  const [{ productId, quantity }] = req.body;
+  const data = { id, productId, quantity };
+  const updateSales = await SalesServices.updateSaleService(data);
+  return res.status(200).json(updateSales);
+};
+
 module.exports = {
     getAllController,
     getByIdController,
     insertSaleController,
+    updateSaleController,
 };
