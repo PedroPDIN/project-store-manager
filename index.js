@@ -3,6 +3,7 @@ const express = require('express');
 const ProductsControllers = require('./controllers/products.controller');
 const SalesControllers = require('./controllers/sales.controller');
 const { isValidNameProduct, isValidQuantityProduct } = require('./middlewares/isValidProducts');
+const { isValidProductIdSales, isValidQuantitySales } = require('./middlewares/isValidSales');
 
 const app = express();
 
@@ -23,11 +24,14 @@ isValidNameProduct,
 isValidQuantityProduct,
 ProductsControllers.insertProductController);
 
-app.post('/sales', SalesControllers.insertSaleController);
+app.post('/sales', 
+isValidProductIdSales,
+isValidQuantitySales,
+SalesControllers.insertSaleController);
 
 app.put('/products/:id',
-isValidNameProduct,
 isValidQuantityProduct,
+isValidNameProduct,
 ProductsControllers.updateProductController);
 
 app.delete('/products/:id',
