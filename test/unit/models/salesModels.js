@@ -67,4 +67,43 @@ describe("Sales Model.", async () => {
       expect(getById).to.have.all.keys('date', 'productId', 'quantity');
     });
   });
+
+  describe('Retorna dados (objeto) da nova venda.', async () => {
+
+    const fakeDate = [{ id: 1, date: '2021-09-09T04:54:29.000Z'}];
+
+    before(() => sinon.stub(connection, 'execute'). resolves(fakeDate));
+    after(() => connection.execute.restore());
+
+    it('Retorna um objeto', async () => {
+      const data = [{ productId: 1, quantity: 3 }];
+      const insertSale = await SalesModel.insertSale(data)
+      expect(insertSale).to.be.a('object');
+    });
+
+    it('Retorna com determinadas chaves(id, itemsSold)', async () => {
+      const data = [{ productId: 1, quantity: 3 }];
+      const insertSale = await SalesModel.insertSale(data)
+      expect(insertSale).to.have.all.keys('id', 'itemsSold');
+    });
+  });
+
+  describe('Retorna o dado (objeto) que irá atualizar a venda.', async () => {
+    const fakeDate = [{ id: 1, date: '2021-09-09T04:54:29.000Z'}];
+
+    before(() => sinon.stub(connection, 'execute'). resolves(fakeDate));
+    after(() => connection.execute.restore());
+
+    it('Retorna um objeto', async () => {
+      const data = { id: 1, productId: 1, quantity: 3 };
+      const updateSale = await SalesModel.updateSale(data);
+      expect(updateSale).to.be.a('object');
+    });
+
+    it('Retorna com determinadas chaves(saleId, itemUpdated)', async () => {
+      const data = { id: 1, productId: 1, quantity: 3 };
+      const updateSale = await SalesModel.updateSale(data);
+      expect(updateSale).to.have.all.keys('saleId', 'itemUpdated');
+    })
+  })
 });
