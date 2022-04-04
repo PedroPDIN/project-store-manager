@@ -192,10 +192,10 @@ describe("Product Service.", async () => {
           ProductsModel.getById.restore();
         });
 
-        it('Retorna status 201.', async () => {
+        it('Retorna status 200.', async () => {
           const dataUpdate = { name: 'Update Product', quantity: 10 };
           const element = await ProductsServices.updateProductService(1, dataUpdate);
-          expect(element.status.status).to.be.equal(201);
+          expect(element.status.status).to.be.equal(200);
         })
         it('Retorna o objeto.', async () => {
           const dataUpdate = { name: 'Update Product', quantity: 10 };

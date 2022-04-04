@@ -30,7 +30,7 @@ const updateProductService = async (id, { name, quantity }) => {
   if (!getById) {
     return { status: { status: 404 }, message: { message: 'Product not found' } };
   }
-  return { status: { status: 201 }, data: updateProduct };
+  return { status: { status: 200 }, data: updateProduct };
 };
 
 const deleteProductService = async (id) => {
