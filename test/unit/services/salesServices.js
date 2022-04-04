@@ -122,7 +122,7 @@ describe("Sales Services", () => {
       });
 
       after(() => {
-        SalesModel.update.Sale.restore();
+        SalesModel.updateSale.restore();
       });
 
       it('Retorna os dados (objeto).', async () => {

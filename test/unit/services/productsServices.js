@@ -98,11 +98,11 @@ describe("Product Service.", async () => {
   
         it('Retorna um objeto.', async () => {
           const element = await ProductsServices.insertProductService(fakeService);
-          expect(element.message).to.be.a('object');
+          expect(element.data).to.be.a('object');
         });
-        it('Retorna o novo produto', async () => { 
+        it('Retorna as chaves (id, name, quantity )', async () => { 
           const element = await ProductsServices.insertProductService(fakeService);
-          expect(element.message).to.have.all.keys('id', 'name', 'quantity');
+          expect(element.data).to.have.all.keys('id', 'name', 'quantity');
         });
       });
 
@@ -151,7 +151,7 @@ describe("Product Service.", async () => {
         it('Retorna status com os novos produtos.', async () => {
           const element = await ProductsServices.insertProductService(fakeService);
           expect(element.status.status).to.be.equal(201);
-          expect(element.message).to.be.equal(fakeService);
+          expect(element.data).to.be.equal(fakeService);
         });
       });
 
@@ -192,10 +192,10 @@ describe("Product Service.", async () => {
           ProductsModel.getById.restore();
         });
 
-        it('Retorna status 200.', async () => {
+        it('Retorna status 201.', async () => {
           const dataUpdate = { name: 'Update Product', quantity: 10 };
           const element = await ProductsServices.updateProductService(1, dataUpdate);
-          expect(element.status.status).to.be.equal(200);
+          expect(element.status.status).to.be.equal(201);
         })
         it('Retorna o objeto.', async () => {
           const dataUpdate = { name: 'Update Product', quantity: 10 };

@@ -33,17 +33,6 @@ describe("Product Model", async () => {
       });
   });
 
-  describe('Os produtos devem ser retornados referente ao ID', async () => {
-
-    before(() => sinon.stub(connection, 'execute'). resolves([[]]));
-    after(() => connection.execute.restore());
-
-    it('Caso o ID não seja encontrado, retorna null.', async () => {
-      const getById = await ProductsModel.getById(0);
-      expect(getById).to.be.equal(null);
-    })
-  })
-
   describe('Caso o ID seja encontrado.', async () => {
     const fakeModel = [
       {
