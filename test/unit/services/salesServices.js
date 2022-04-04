@@ -4,7 +4,7 @@ const sinon = require("sinon");
 const SalesModel = require("../../../models/sales.model");
 const SalesServices = require("../../../services/sales.services");
 
-describe.only("Sales Services", () => {
+describe("Sales Services", () => {
   describe("Retorna todos os vendas.", async () => {
     const fakeModel = [
       {

@@ -58,8 +58,7 @@ const updateProductController = async (req, res) => {
     .json(deleteProduct.message);
   }
   return res
-  .status(deleteProduct.status.status)
-  .end();
+  .status(deleteProduct.status.status).end();
  };
 
 module.exports = {
