@@ -111,4 +111,20 @@ describe("Product Model", async () => {
       expect(updateProduct).to.have.all.keys('id', 'name', 'quantity');
     });
   });
+
+  describe("Verifica se o produto foi deletado.", async () => {
+    const query = `
+    DELETE FROM StoreManager.products
+    WHERE id = ?;
+    `;
+
+    before(() => sinon.stub(connection, 'execute').withArgs(query, [1]).resolves());
+    after(() => connection.execute.restore());
+
+    it('Verifica se o "deleteProduct" foi chamada', async () => {
+      await ProductsModel.deleteProduct(1)
+      const arg = connection.execute.lastCall.args[1];
+      expect(arg).to.be.deep.equal([1]);
+    });
+  });
 });
