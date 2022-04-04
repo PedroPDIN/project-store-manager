@@ -89,7 +89,7 @@ describe("Product Service.", async () => {
   
         before(() => {
           sinon.stub(ProductsModel, 'insertProduct').resolves(fakeService);
-          sinon.stub(ProductsModel, 'existProduct').resolves([[]]);
+           sinon.stub(ProductsModel, 'existProduct').resolves([[]]);
         })
         after(() => {
           ProductsModel.insertProduct.restore();
@@ -123,13 +123,14 @@ describe("Product Service.", async () => {
           ProductsModel.insertProduct.restore();
         })
 
-        it('Retorna status 409 e mensagem de erro.', async () => {
+        it('Retorna status 409 e sua mensagem de erro.', async () => {
           const element = await ProductsServices.insertProductService(fakeService);
           expect(element.status.status).to.be.equal(409);
           expect(element.message.message).to.be.equal('Product already exists');
         });
       });
 
+        // Insert Product
       describe('Retorna status 201, com os novos produtos.', async () => {
         const fakeService = {
           id: 1,
@@ -151,6 +152,92 @@ describe("Product Service.", async () => {
           const element = await ProductsServices.insertProductService(fakeService);
           expect(element.status.status).to.be.equal(201);
           expect(element.message).to.be.equal(fakeService);
+        });
+      });
+
+      // Update Product
+      describe('Retorna status 404 caso não encontre o ID para fazer update, com a determinada mensagem.', async () => {
+
+        const fakeService = { id: 1, name: 'Update Product', quantity: 10 };
+
+        before(() => {
+          sinon.stub(ProductsModel, 'getById').resolves(false);
+          sinon.stub(ProductsModel, 'updateProduct').resolves(fakeService);
+        });
+
+        after(() => {
+          ProductsModel.getById.restore();
+          ProductsModel.updateProduct.restore();
+        });
+
+        it('Retorna status 404 e sua mensagem de erro.', async () => {
+          const dataUpdate = { name: 'Update Product', quantity: 10 };
+          const element = await ProductsServices.updateProductService(1, dataUpdate);
+          expect(element.status.status).to.be.equal(404);
+          expect(element.message.message).to.be.equal('Product not found');
+        });
+      })
+
+      describe('Retorna status 200, com o dados (objeto) que ira atualizar o produto', async () => {
+
+        const fakeService = { id: 1, name: 'Update Product', quantity: 10 };
+
+        before(() => {
+          sinon.stub(ProductsModel, 'getById').resolves(true);
+          sinon.stub(ProductsModel, 'updateProduct').resolves(fakeService);
+        });
+
+        after(() => {
+          ProductsModel.updateProduct.restore();
+          ProductsModel.getById.restore();
+        });
+
+        it('Retorna status 200.', async () => {
+          const dataUpdate = { name: 'Update Product', quantity: 10 };
+          const element = await ProductsServices.updateProductService(1, dataUpdate);
+          expect(element.status.status).to.be.equal(200);
+        })
+        it('Retorna o objeto.', async () => {
+          const dataUpdate = { name: 'Update Product', quantity: 10 };
+          const element = await ProductsServices.updateProductService(1, dataUpdate);
+          expect(element.data).to.have.all.keys('id', 'name', 'quantity');
+        })
+      });
+
+      // Delete Product
+      describe('Retorna status 404 caso não encontre o ID para fazer delete, com a determinada mensagem.', async () => {
+        before(() => {
+          sinon.stub(ProductsModel, 'getById').resolves(false);
+          sinon.stub(ProductsModel, 'deleteProduct').resolves(999);
+        });
+
+        after(() => {
+          ProductsModel.getById.restore();
+          ProductsModel.deleteProduct.restore();
+        });
+
+        it('Retorna status 404 e sua mensagem de erro.', async () => {
+          const element = await ProductsServices.deleteProductService(000);
+          expect(element.status.status).to.be.equal(404);
+          expect(element.message.message).to.be.equal('Product not found');
+        });
+      });
+
+      describe('Retorna status 204, confirmando a exclusão do produto', async () => {
+
+        before(() => {
+          sinon.stub(ProductsModel, 'getById').resolves(true);
+          sinon.stub(ProductsModel, 'deleteProduct').resolves(1);
+        });
+
+        after(() => {
+          ProductsModel.deleteProduct.restore();
+          ProductsModel.getById.restore();
+        });
+
+        it('Retorna status 204.', async () => {
+          const element = await ProductsServices.deleteProductService(1);
+          expect(element.status.status).to.be.equal(204);
         });
       });
     });
