@@ -103,4 +103,59 @@ describe("Sales Controller.", async () => {
     });
   });
 
+  describe('Retorna status 201, confirmando que o cadastro de uma nova venda foi feita com sucesso', async () => {
+    const fakeService =  { 
+      id: 1, 
+      itemsSold: [{ productId: 1, quantity: 3}]
+    };
+
+    const response = {};
+    const request = {};
+
+    before(() => {
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns();
+
+      request.body = [{ productId: 1, quantity: 10 }];
+
+      sinon.stub(SalesServices, 'insertSaleService').resolves(fakeService);
+    });
+
+    after(() => {
+      SalesServices.insertSaleService.restore();
+    })
+
+    it('Retorna status 201.', async () => {
+      await SalesControllers.insertSaleController(request, response);
+      expect(response.status.calledWith(201)).to.be.equal(true);
+    });
+  });
+
+  describe('Retorna status 200, confirmando que a atualização de uma venda foi feita com sucesso', async () => {
+    const fakeService =  { 
+      id: 1, 
+      itemUpdated: [{ productId: 1, quantity: 3}]
+    };
+
+    const response = {};
+    const request = {};
+
+    before(() => {
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns();
+      request.params = { id: 1 };
+      request.body = [{ productId: 1, quantity: 10 }];
+
+      sinon.stub(SalesServices, 'updateSaleService').resolves(fakeService);
+    });
+
+    after(() => {
+      SalesServices.updateSaleService.restore();
+    })
+
+    it('Retorna status 200.', async () => {
+      await SalesControllers.updateSaleController(request, response);
+      expect(response.status.calledWith(200)).to.be.equal(true);
+    });
+  });
 });
