@@ -9,11 +9,6 @@ const app = express();
 
 app.use(express.json());
 
-// não remova esse endpoint, e para o avaliador funcionar
-app.get('/', (_request, response) => {
-  response.send();
-});
-
 app.get('/products/:id', ProductsControllers.getByIdController);
 app.get('/products', ProductsControllers.getAllController);
 app.get('/sales', SalesControllers.getAllController);
